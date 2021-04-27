@@ -4,139 +4,82 @@
 <head th:replace="~{import :: head}"></head>
 
 
-
 <body>
 
 <div>
-    <!--header-->
+
     <head th:replace="~{import :: navBar}"></head>
+
 
     <!--banner-->
     <section class="banner">
-        <div><img src="images/down_banner.jpg" alt=""></div>
+        <div><img src="images/news_banner.jpg" alt=""></div>
     </section>
+
+
     <div class="com_zi clearfix">
         <div class="left_zi">
             <div class="top_com">
-                <span>下载中心</span>
+                <span>新闻资讯</span>
             </div>
             <ul class="nav_left">
-                <li>
-                    <a href="download.html">下载中心</a>
+                <li class="active">
+                    <a href="news.html">公司新闻</a>
                 </li>
-
+                <!--<li>
+                    <a href="news.html">行业新闻</a>
+                </li>-->
             </ul>
             <div class="pro_lei">
-                <div class="top">新闻资讯</div>
-                <ul class="left_g_new">
-                    <li><a href="news.html">鸡蛋上的喷码标记对健康有影响吗</a></li>
-                    <li><a href="news.html">激光喷码机有哪些优势</a></li>
-                    <li><a href="news.html">如何保障激光喷码机数据安全</a></li>
-                    <li><a href="news.html">激光喷码机 用科技带动生产力</a></li>
-                    <li><a href="news.html">电子面单相较传统面单有哪些优势？</a></li>
-                </ul>
+                <div class="top">产品展示</div>
+                <div class="pro_l_nei">
+                    <div class="pic">
+                        <img src="images/case3.jpg" alt="" class="vcenter"/>
+                        <i></i>
+                    </div>
+                    <p>
+                        MOTOROLA-Symbol LS-2208
+                    </p>
+                </div>
             </div>
         </div>
 
 
-
-
-
-
-
-
         <div class="right_zi">
-
             <div class="bar clearfix">
-                <span class="b_tt">下载中心</span>
-                <span class="curbar"><i>您当前的位置：</i><a href="index.html">首页</a> > <i>下载中心</i></span>
+                <span class="b_tt">新闻资讯</span>
+                <span class="curbar"><i>您当前的位置：</i><a href="index.html">首页</a> > <a
+                        href="news.html">新闻资讯</a> > <i>公司新闻</i></span>
             </div>
 
 
+            <!--新闻对正文-->
+            <div class="news_show_zi">
+                <!--标题-->
+                <h4 th:text="${result.getTitle()}"></h4>
 
-            <form th:action="@{/download}" method="get" id="formId">
-
-
-                <div class="bar clearfix">
-                    <div class="input-group">
-                        <input type="text"  name="title" id="searchTitle"  class="form-control" placeholder=" 请输入软件名称..." th:value="${searchTitle}">
-                        <input type="hidden"  id="page" name="page" >
-                        <input type="hidden"  id="xxx" name="xxx" >
-                        <span class="input-group-btn">
-                     <button class="btn btn-default"  type="button" onclick="gotoPage()">搜索</button>
-                    </span>
-                    </div>
+                <!--正文-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">说明</div>
+                    <div class="panel-body" th:utext="${result.getContent()}"></div>
                 </div>
 
 
-                <script>
+                <!--下载链接-->
+                <div class="panel panel-default">
+                    <div class="panel-heading">下载文件</div>
+                    <div class="panel-body">
+                        <table>
+                            <tr th:each="file:${fileInfo}">
+                                <th><a th:href="${file.path}" th:text="${file.name}"></a></th>
+                            </tr>
+                        </table>
 
-                    function gotoPage(valueT){
+                        </br>
+                    </div>
+                </div>
 
-
-                        console.log("点击了："+valueT)
-
-                        if(valueT!=null){
-
-                            $("#page").attr("value", valueT);
-
-                        }else{
-
-                            $("#page").attr("value", 1);
-
-                        }
-
-
-
-                        $("#formId").submit();
-                    }
-
-                </script>
-
-
-
-                <!--下载内容-->
-                <ul class="down_ul">
-
-
-                    <li th:each="software:${pageInfo.getPage()}">
-                        <a th:href="@{/download_show(id=${software.getId()})}"><span
-                                th:text="${software.getTitle()}"></span>
-                            <time th:text="${#dates.format(software.getCreate_time(),'yyyy-MM-dd')}"></time>
-                        </a>
-                    </li>
-
-                </ul>
-
-                <section class="pageing">
-
-                    <!-- 首页 -->
-
-                    <!--<a th:href="'/download?page=1&title='"+searchTitle>首页</a>-->
-                    <a onclick="gotoPage(1)">首页</a>
-
-
-                    <!-- 上一页 -->
-                    <a  th:if="${pageInfo.hasPre}"    th:onclick="'javascript:gotoPage(\'' + ${pageInfo.getCurrentPage()-1} + '\');'"  th:text="上一页"></a>
-
-                    <!-- 下一页 -->
-                    <a   th:if="${pageInfo.hasNext}"   th:onclick="'javascript:gotoPage(\'' + ${pageInfo.getCurrentPage()+1} + '\');'" th:text="下一页"></a>
-
-
-                    <!-- 尾页 -->
-                    <a    th:onclick="'javascript:gotoPage(\'' + ${pageInfo.getTotalPage()-1} + '\');'">尾页</a>
-
-                    <div th:text="${'当前位于第'+pageInfo.getCurrentPage()+'页'}"></div>
-                    <div th:text="${'合计'+pageInfo.getTotal()+'条软件数据，一共'+pageInfo.getTotalPage()+'页'}"></div>
-
-
-                </section>
-
-
-
-
-            </form>
-
+            </div>
 
 
         </div>
@@ -163,7 +106,7 @@
                 <li>
                     <a href="news.html" class="tit">新闻展示</a>
                     <a href="news.html">公司新闻</a>
-                    <!--<a href="news.html">行业新闻</a>-->
+                    <!--	<a href="news.html">行业新闻</a>-->
 
                 </li>
                 <li>

@@ -51,11 +51,11 @@ public class NewListController {
     ) throws ParseException {
         log.info("访问了 getPage");
 
-        Integer pageNum = 0;
+        Integer pageNum = 1;
         if(!page.equals("")){
             pageNum = Integer.parseInt(page);
         }
-        Integer perPage = 0;
+        Integer perPage = Integer.MAX_VALUE;
         if(!per_page.equals("")){
             perPage = Integer.parseInt(per_page);
         }
@@ -108,7 +108,6 @@ public class NewListController {
 
 
         if(params.get("title")==null || params.get("title").equals("")){
-
 
 
             ErrorInfoStructure errorInfoStructure = new ErrorInfoStructure();
@@ -199,7 +198,7 @@ public class NewListController {
 
         newsRepository.deleteBatch(ids);
 
-       // newsRepository.deleteById(Integer.parseInt(params.get("id")+""));
+
 
 
         ReturnData returnData = new ReturnData();

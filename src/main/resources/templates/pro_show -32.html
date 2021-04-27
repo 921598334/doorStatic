@@ -1,108 +1,14 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<title>XXX</title>
-	<meta name="keywords" content="">
-	<meta name="description" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<link rel="shortcut icon" href="favicon.ico">
-	
-	<!-- include main css -->
-	<link rel="stylesheet" type="text/css" href="css/slick.css"/>	
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
-	<link rel="stylesheet" type="text/css" href="css/jquery.mmenu.all.css"/>
-	<link rel="stylesheet" type="text/css" href="css/style.css"/>
-	<link rel="stylesheet" type="text/css" href="css/reset.css"/>
-	<link rel="stylesheet" href="css/animates.css" />
-	<!--[if lt IE 9]>
-    <script src="http://apps.bdimg.com/libs/html5shiv/r29/html5.min.js"></script>
-    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-	
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{import :: head}"></head>
+
+
 <body>
-	
+
 <div>
-	<!--header-->
-	<header class="header">
-		<!--<div class="container" style="text-align: -webkit-right; margin-top: 10px; margin-bottom: 10px;">
-			
-		
-	        <div class="ensou">
-	    		<a href="#" class="en">EN</a>
-	    		<a href="javascript:;" class="sou_img"><img src="images/fang.jpg" alt="" /></a>
-	    		<div class="sou_nei">
-	    			<input name="" id="" placeholder="输入关键词" type="">
-	    			<img src="images/fang.jpg" alt="" />
-	    		</div>
-	    	</div>
-	    	<a href="#mmenu" class="iconfont phone-nav">
-	    		 <span class="glyphicon glyphicon-align-justify"></span>
-	    	</a>
-	    </div>	-->
-	    <div class="kuan_heaaer clearfix container">
-	    	<a href="index.html" class="logo">
-	    		<img src="images/logo.jpg" alt="" />
-	    	</a>
-	    	<div class="nav_div">
-	    		<ul class="nav_ul">                                                                                                      
-	    			<li class="active">
-	    				<a href="index.html"><span>网站首页</span></a>
-	    			</li>
-	    			<li>
-	    				<a href="about.html"><span>关于我们</span></a>
-	    				<div class="erji">
-	    					<a href="about.html">公司简介</a>
-							
-							<a href="honor.html">荣誉资质</a>
-							
-	    				</div>
-	    			</li>
-	    			<li>
-	    				<a href="pro.html"><span>产品展示</span></a>
-	    				<div class="erji">
-	    					<a href="pro.html">条码机系列</a>
-							<a href="pro - 1.html">彩色打印机</a>
-							<a href="pro - 2.html">扫码枪系列</a>
-							<a href="pro - 3.html">条码软件系列</a>
-	    				</div>
-	    			</li>
-	    			<!--<li>
-	    				<a href="case.html"><span>典型业绩</span></a>
-	    				<div class="erji">
-	    					<a href="case.html">典型业绩一</a>
-			    			<a href="case.html">典型业绩二</a>
-			    			<a href="case.html">典型业绩三</a>
-	    				</div>
-	    			</li>-->
-	    				<li>
-	    				<a href="news.html"><span>新闻资讯</span></a>
-	    				<!--<div class="erji">
-	    					<a href="news.html">公司新闻</a>
-	    					<a href="news.html">行业新闻</a>
-	    				</div>-->
-	    			</li>
-	    				<li>
-	    				<a href="download.html"><span>下载中心</span></a>
-	    			</li>
-	    				<li>
-	    				<a href="contact.html"><span>联系我们</span></a>
-	    				<div class="erji">
-	    					<a href="contact.html">联系方式</a>
-	    					<a href="feedback.html">在线留言</a>    	
-	    				</div>
-	    			</li>
-	    		</ul>
-	    	</div>
-	    	<a href="#mmenu" class="iconfont phone-nav">
-	    		 <span class="glyphicon glyphicon-align-justify"></span>
-	    	</a>
-	    </div>
-	    
-	</header>
-			
+
+	<head th:replace="~{import :: navBar}"></head>
 	<!--banner-->
 	<section class="banner">
 	    <div><img src="images/pro_banner.jpg" alt=""></div>

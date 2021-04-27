@@ -61,11 +61,11 @@ public class SorftwareController {
     ) throws ParseException {
         log.info("访问了 getSorftwarePage");
 
-        Integer pageNum = 0;
+        Integer pageNum = 1;
         if(!page.equals("")){
             pageNum = Integer.parseInt(page);
         }
-        Integer perPage = 0;
+        Integer perPage = Integer.MAX_VALUE;
         if(!per_page.equals("")){
             perPage = Integer.parseInt(per_page);
         }
@@ -137,11 +137,7 @@ public class SorftwareController {
 
 
 
-    @Data
-    class FileInfo{
-        private String name;
-        private String path;
-    }
+
 
 
     //不知道为什么post请求用通常方法无法接收参数

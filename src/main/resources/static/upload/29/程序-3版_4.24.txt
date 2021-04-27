@@ -1,0 +1,278 @@
+
+using System;
+using System.Collections.Generic;
+using System.IO.Ports;              //需要引入的命名空间
+using System.Text;
+using System.Data;
+using System.Xml;
+using Microsoft.Win32;
+
+namespace 串口通信发送和接收端
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            SerialPortTest port = new SerialPortTest();
+
+            
+            string SwitchRun = port.RegeditRead();   //接收返回的SwitchRun参数
+
+            while (SwitchRun == "True")
+            {
+                if (!(port.isDO)) port.Send();    //发送数据
+                SwitchRun = port.RegeditRead();   //接收返回的SwitchRun参数
+                System.Threading.Thread.Sleep(100); //睡眠定时
+            }
+
+            if (SwitchRun == "False")
+            {
+                //需要在此处完成定时器的销毁
+                port.myTimer.Enabled = false;
+
+                System.Environment.Exit(0);  //退出当前程序
+            }
+
+        }
+    }
+
+
+    public class SerialPortTest
+    {				//==================== 	1、考虑在此处设置定时器	==========================
+        SerialPort port;
+        char ch0 = '\0';
+        char ch1;
+        string str = string.Empty;  //用于存储DI中的状态变量（true/false）
+        public bool isDO = false;
+        bool isDI = false;
+        int evtNum = 0;
+
+        int TimerNum = 0;	//用于统计定时器开启的次数
+
+        RegistryKey rsg;	//用于操作注册表的对象
+        RegistryKey rsg1;	//用于操作注册表的对象
+        string DO7Setting;
+
+        public System.Timers.Timer myTimer;
+        
+
+
+        //==================== 	1、考虑在此处设置定时器	==========================
+
+        public void Form1_Load(object sender, EventArgs e)
+        {
+            myTimer = new System.Timers.Timer(1500);	//定时周期1.5s
+            myTimer.Elapsed += myTimer_Elapsed;	//到1.5s应该做的事件
+            myTimer.AutoReset = true; 	//是否不断重复定时器操作  
+        }
+        //定时器执行事件
+        void myTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            // GetUser(lblUserID.Text.Trim(), lblConnection.Text.Trim());
+            // GetDepart(lblUserDepart.Text.Trim(), lblConnection.Text.Trim());
+
+            rsg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Aaronia\\HF6065", true);//true表示可以修改
+            for (int k = 0; k <= 5; k++)
+            {
+                if (TimerNum == 2 * k + 1)
+                {
+                    //关闭DO的设置
+                    rsg.SetValue("DO7Setting", "False");
+                    rsg.Close();
+                }
+                else
+                {
+                    //打开DO的设置
+                    rsg.SetValue("DO7Setting", "True");
+                    rsg.Close();
+                }
+            }
+        }
+
+
+        //  =====端口及功能设置=====
+        public SerialPortTest()
+        {
+            //1.指定COM9口,根据情况也可以指定其他COM口
+            port = new SerialPort("COM9");
+
+            //1.1指定波特率等参数
+            port.BaudRate = 9600;
+            port.Parity = 0;
+            port.DataBits = 8;
+            port.StopBits = StopBits.One;
+
+            try
+            {
+                port.Open();	//打开COM口
+                Receieve();		//接收数据
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("打开COM口失败");
+            }
+        }
+
+        //2.接收数据
+        private void Receieve()
+        {
+            //2.1接收到数据就会触发port_DataReceived方法
+            port.DataReceived += port_DataReceived;
+        }
+
+        void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            //2.2存储接收的字符串
+            string strReceive = string.Empty;
+
+            evtNum++;
+
+            if (port != null)
+            {
+                //读取接收到的字节长度
+                int n = port.BytesToRead;
+                //if (n<1 || n!=8) Console.WriteLine("N=" + n.ToString() + ", isDO = " +isDO.ToString() + ", isDI = " + isDI.ToString() + "   Event=" + evtNum.ToString());
+                //定义字节存储器数组
+                byte[] byteReceive = new byte[n];
+                //2.3接收的字节存入字节存储器数组
+                port.Read(byteReceive, 0, n);
+                //2.4把接收的的字节数组转成字符串
+
+                if (isDO)
+                {
+                    Console.WriteLine("Event=" + evtNum.ToString());
+                    isDO = false;
+                    return;
+                }
+
+                if (!isDI)
+                {
+                    Console.WriteLine("NDI Event=" + evtNum.ToString());
+                    return;
+                }
+
+                // 接收到的数据
+                strReceive = Encoding.UTF8.GetString(byteReceive);
+
+                //2.5此处是获取第4位的字符信息
+                if (strReceive.Length >= 4)
+                {
+                    ch1 = strReceive[3];	//记录此次的区别字符
+                }
+
+                //2.6进行数据对比及写入某文件中
+                Compare();
+
+                isDI = false;
+            }
+        }
+
+        //3.发送数据
+        public void Send()
+        {
+            isDI = true;
+            string TxData = "$116\r";
+            port.Write(TxData);		//此处为发送的指令
+
+            System.Threading.Thread.Sleep(100); //睡眠定时
+        }
+
+        //4.进行数据比对与写入
+        public void Compare()
+        {
+            if (ch0 == '\0')
+            {
+                ch0 = ch1;
+            }
+            else    //4.2 此处考虑情况：先7后F，写true;先F后7，写false;一直不变，则跳出此次循环
+            {
+                if (ch0 == '7' && ch1 == 'F')		//==================== 	2、此处为开关打开，应该启动定时器	==========================
+                {
+                    myTimer.Start();		//启动定时器
+                    TimerNum = TimerNum + 1;
+
+                    str = "True";
+                    RegeditWrite2(); //用于写注册表
+                    Console.WriteLine("开关发生由关到开的转变，evtNum=" + evtNum.ToString());
+                }
+                else if (ch0 == 'F' && ch1 == '7')	//==================== 	3、此处为开关打开，应该关闭定时器	==========================
+                {
+                    myTimer.Stop();		//关闭定时器
+
+                    str = "False";
+                    RegeditWrite2(); //用于写注册表
+                    Console.WriteLine("开关发生由开到关的转变，evtNum=" + evtNum.ToString());
+                }
+                ch0 = ch1;
+            }
+        }
+
+
+        //5.写入注册表
+        public void RegeditWrite()
+        {
+
+            rsg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Aaronia\\HF6065", true);//true表示可以修改
+
+            rsg.SetValue("SwitchOn", str);
+            rsg.Close();
+        }
+        //5.1 根据注册表中的不同情况，执行
+        public void RegeditWrite2()
+        {
+            rsg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Aaronia\\HF6065", true);//true表示可以修改
+            DO7Setting = rsg.GetValue("SwitchBefore").ToString();       //获取注册表中的信息该变量
+
+            if (DO7Setting == "True")		//先执行信号模块的开关
+            {
+                Send2(str);
+            }
+
+            rsg.SetValue("SwitchOn", str);
+            rsg.Close();
+
+            if (DO7Setting == "False")		//后执行信号模块的开关
+            {
+                Send2(str);
+            }
+        }
+        //5.2处理Do7的方法
+        public void Send2(string flagStr)
+        {
+            isDO = true;
+            if (flagStr == "True")        //(ch0 == '7' && ch1 == 'F')
+            {
+                string TxData = "#111701\r";
+                port.Write(TxData);
+            }
+            else                        //if (ch0 == 'F' && ch1 == '7')
+            {
+                string TxData = "#111700\r";
+                port.Write(TxData);
+            }
+            System.Threading.Thread.Sleep(100); //睡眠定时
+        }
+
+
+        //6.读取注册表状态参数,并将结果返回
+        public string RegeditRead()
+        {
+
+            rsg1 = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Aaronia\\HF6065", true);//true表示可以修改
+
+            return rsg1.GetValue("SwitchRun").ToString();
+        }
+
+
+        //7.关闭COM口
+        public void Close()
+        {
+            if (port != null && port.IsOpen)
+            {
+                port.Close();
+                port.Dispose();
+            }
+        }
+    }
+}

@@ -48,11 +48,11 @@ public class TypeListController {
     ) throws ParseException {
         log.info("访问了 getSoftwareTypePage");
 
-        Integer pageNum = 0;
+        Integer pageNum = 1;
         if(!page.equals("")){
             pageNum = Integer.parseInt(page);
         }
-        Integer perPage = 0;
+        Integer perPage = Integer.MAX_VALUE;
         if(!per_page.equals("")){
             perPage = Integer.parseInt(per_page);
         }

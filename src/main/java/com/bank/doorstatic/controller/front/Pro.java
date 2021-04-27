@@ -4,21 +4,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin("*")
 @Slf4j
 @Controller
-public class Index {
+public class Pro {
 
 
 
 
 
-    @GetMapping("/index")
-    public String index() {
-        log.info("访问了index");
-        return "index";
+    @GetMapping("/pro")
+    public String pro() {
+        log.info("访问了 pro");
+        return "pro";
     }
 
 
