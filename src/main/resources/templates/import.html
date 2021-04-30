@@ -48,22 +48,22 @@
                     </li>
                     <li>
                         <a href="/about"><span>关于我们</span></a>
-                        <div class="erji">
-                            <a href="/about">部门简介</a>
+                        <!--<div class="erji">-->
+                            <!--<a href="/about">部门简介</a>-->
 
-                            <a href="/honor">荣誉资质</a>
+                            <!--<a href="/honor">荣誉资质</a>-->
 
-                        </div>
+                        <!--</div>-->
                     </li>
-                    <li>
-                        <a href="/pro"><span>产品展示</span></a>
-                        <div class="erji">
-                            <a href="/pro">条码机系列</a>
-                            <a href="/pro - 1">彩色打印机</a>
-                            <a href="/pro - 2">扫码枪系列</a>
-                            <a href="/pro - 3">条码软件系列</a>
-                        </div>
-                    </li>
+                    <!--<li>-->
+                        <!--<a href="/pro"><span>产品展示</span></a>-->
+                        <!--<div class="erji">-->
+                            <!--<a href="/pro">条码机系列</a>-->
+                            <!--<a href="/pro - 1">彩色打印机</a>-->
+                            <!--<a href="/pro - 2">扫码枪系列</a>-->
+                            <!--<a href="/pro - 3">条码软件系列</a>-->
+                        <!--</div>-->
+                    <!--</li>-->
                     <!--<li>
                         <a href="/case"><span>典型业绩</span></a>
                         <div class="erji">
@@ -109,13 +109,13 @@
                     <a href="/honor">荣誉资质</a>
 
                 </li>
-                <li>
-                    <a href="/pro" class="tit">产品展示</a>
-                    <a href="/pro">条码机系列</a>
-                    <a href="/pro - 1">彩色打印机</a>
-                    <a href="/pro - 2">扫码枪系列</a>
-                    <a href="/pro - 3">条码软件系列</a>
-                </li>
+                <!--<li>-->
+                    <!--<a href="/pro" class="tit">产品展示</a>-->
+                    <!--<a href="/pro">条码机系列</a>-->
+                    <!--<a href="/pro - 1">彩色打印机</a>-->
+                    <!--<a href="/pro - 2">扫码枪系列</a>-->
+                    <!--<a href="/pro - 3">条码软件系列</a>-->
+                <!--</li>-->
 
                 <li>
                     <a href="/news" class="tit">新闻展示</a>
@@ -126,13 +126,13 @@
                 <li>
                     <a href="/contact" class="tit">联系我们</a>
                     <a href="/contact">联系方式</a>
-                    <a href="/feedback">在线留言</a>
+                    <!--<a href="/feedback">在线留言</a>-->
                 </li>
             </ul>
             <div class="er_right">
                 <div class="er">
                     <div class="pic">
-                        <img src="images/erwei.png" alt="" class="vcenter">
+                        <img src="/images/erweima1.jpg" alt="" class="vcenter">
                         <i></i>
                     </div>
                     <div class="text">
@@ -142,7 +142,7 @@
                 </div>
                 <div class="dian">
                     <div class="di_bg" style="margin-top: 20PX;">
-                        <a href="/tel:XXX  ">XXX </a>
+                        <a >023-65855218 </a>
                         <span>服务咨询热线</span>
                     </div>
 
@@ -153,6 +153,19 @@
         </div>
 
     </div>
+
+
+
+    <!--新闻资讯-->
+    <div class="pro_lei" th:fragment="leftBar">
+        <div class="top">新闻资讯</div>
+        <ul class="left_g_new" >
+            <li th:each="neww:${newList}"><a th:href="@{/news_show(id=${neww.getId()})}" >[[${neww.getTitle()}]]</a></li>
+        </ul>
+    </div>
+
+
+
 
 
 

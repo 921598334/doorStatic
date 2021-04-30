@@ -2,6 +2,7 @@ package com.bank.doorstatic.controller.front;
 
 import com.alibaba.fastjson.JSON;
 import com.bank.doorstatic.entity.MyPageInfo;
+import com.bank.doorstatic.entity.newList.News;
 import com.bank.doorstatic.entity.sorftware.Sorftware;
 import com.bank.doorstatic.entity.sorftware.SorftwareType;
 import com.bank.doorstatic.model.FileInfo;
@@ -9,6 +10,7 @@ import com.bank.doorstatic.model.SorftwareDao;
 import com.bank.doorstatic.model.SorftwareTypeDAO;
 import com.bank.doorstatic.repository.sorftware.SorftwareRepository;
 import com.bank.doorstatic.repository.sorftware.SorftwareTypeRepository;
+import com.bank.doorstatic.service.newList.NewListService;
 import com.bank.doorstatic.service.sorftware.SorftwareListService;
 import jdk.nashorn.internal.parser.JSONParser;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,9 @@ public class Download {
     @Autowired
     SorftwareTypeRepository sorftwareTypeRepository;
 
+
+    @Autowired
+    NewListService newListService;
 
 
     @GetMapping("/download")
@@ -92,6 +97,19 @@ public class Download {
         model.addAttribute("pageInfo",myPageInfo);
 
         model.addAttribute("searchTitle",title);
+
+
+
+
+        //        获取新闻简介
+        List<News> result = newListService.queryFlows(1, 5, null,  null,  null,  null);
+        model.addAttribute("newList",result);
+
+
+
+
+
+
 
         return "download";
     }
